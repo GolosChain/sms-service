@@ -1,17 +1,21 @@
 const core = require('gls-core-service');
 const BasicConnector = core.services.Connector;
+const Send = require('../controllers/Send');
 
 class Connector extends BasicConnector {
-    constructor() {
+    constructor(smsGate) {
         super();
 
-        // TODO -
+        this._sendController = new Send({ smsGate, connector: this });
     }
 
     async start() {
         await super.start({
             serverRoutes: {
-                // TODO -
+                sendPlainSms: this._sendController.sendPlainSms.bind(this._sendController),
+            },
+            requiredClients: {
+                registration: env.GLS_REGISTRATION_CONNECT,
             },
         });
     }

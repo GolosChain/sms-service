@@ -12,10 +12,10 @@ class Main extends BasicMain {
     constructor() {
         super(stats, env);
 
-        const connector = new Connector();
         const smsc = new Smsc();
         const smsGate = new SmsGate(smsc, twilio);
         const smsSecondCheck = new SmsSecondCheck(smsc, twilio);
+        const connector = new Connector(smsGate);
 
         this.addNested(smsGate, smsSecondCheck, connector);
     }

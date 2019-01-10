@@ -53,7 +53,7 @@ class SmsSecondCheck extends BasicService {
     }
 
     async _extractPhonesHistoryFromTWILIO() {
-        const ago = env.GLS_SMS_VERIFY_EXPIRATION_HOURS + 1;
+        const ago = env.GLS_SMS_SECOND_CHECK_HISTORY_HOURS + 1;
         const query = { dateSent: Moments.ago(ago) };
         const result = [];
 

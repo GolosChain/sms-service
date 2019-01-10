@@ -32,7 +32,7 @@ class Smsc {
     async getPhonesHistory() {
         const login = env.GLS_SMS_GATE_LOGIN;
         const pass = env.GLS_SMS_GATE_PASS;
-        const hour = env.GLS_SMS_VERIFY_EXPIRATION_HOURS + 1;
+        const hour = env.GLS_SMS_SECOND_CHECK_HISTORY_HOURS + 1;
         const query = [
             `${HISTORY_POINT}`,
             `?get_answers=1`,

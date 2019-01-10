@@ -17,13 +17,21 @@
   },
   "homepage": "https://github.com/GolosChain/sms-service#readme",
   "dependencies": {
-    "gls-core-service": "^2.16.1"
+    "gls-core-service": "^2.16.1",
+    "jayson": "^2.1.1",
+    "micro": "^9.3.3",
+    "ramda": "^0.26.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
+    "twilio": "^3.26.1",
+    "urlencoded-body-parser": "^2.0.1"
   },
   "prettier": {
     "singleQuote": true,
     "tabWidth": 4,
     "semi": true,
     "trailingComma": "es5",
+    "printWidth": 100,
     "overrides": [
       {
         "files": [

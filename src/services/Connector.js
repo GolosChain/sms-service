@@ -1,12 +1,15 @@
 const core = require('gls-core-service');
 const BasicConnector = core.services.Connector;
 const Send = require('../controllers/Send');
+const Registration = require('../controllers/Registration');
 
 class Connector extends BasicConnector {
-    constructor(smsGate) {
+    constructor({ smsGate, smsSecondCheck }) {
         super();
 
         this._sendController = new Send({ smsGate, connector: this });
+
+        new Registration({ smsGate, smsSecondCheck, connector: this });
     }
 
     async start() {

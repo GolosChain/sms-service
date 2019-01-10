@@ -15,9 +15,10 @@ class Main extends BasicMain {
         const smsc = new Smsc();
         const smsGate = new SmsGate(smsc, twilio);
         const smsSecondCheck = new SmsSecondCheck(smsc, twilio);
-        const connector = new Connector(smsGate);
+        const connector = new Connector({ smsGate, smsSecondCheck });
 
         this.addNested(smsGate, smsSecondCheck, connector);
+        this.defineMeta({ name: 'sms' });
     }
 }
 

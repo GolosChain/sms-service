@@ -45,6 +45,10 @@ class SmsGate extends BasicService {
     }
 
     async sendTo(phone, message, targetLang) {
+        if (!phone || !message || !targetLang) {
+            throw { code: 400, message: 'Invalid request' };
+        }
+
         switch (targetLang) {
             case 'ru':
                 await this._smsc.send(phone, message);
@@ -59,6 +63,8 @@ class SmsGate extends BasicService {
                 } catch (error) {
                     Logger.error(`Twilio sms send error - ${error}`);
                     stats.increment('twilio_sms_send_error');
+
+                    throw { code: 500, message: error.message };
                 }
         }
     }

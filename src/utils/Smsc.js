@@ -1,3 +1,5 @@
+const core = require('gls-core-service');
+const Logger = core.utils.Logger;
 const request = require('request-promise-native');
 const env = require('../data/env');
 
@@ -23,7 +25,9 @@ class Smsc {
         const result = await request.get(query);
 
         if (result.error) {
-            throw `SMSC send error - [${result.error_code}] ${result.error}`;
+            Logger.error(`SMSC send error - [${result.error_code}] ${result.error}`);
+
+            throw { code: 500, message: result.error.message };
         } else {
             return result;
         }

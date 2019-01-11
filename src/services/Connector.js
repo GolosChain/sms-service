@@ -2,6 +2,7 @@ const core = require('gls-core-service');
 const BasicConnector = core.services.Connector;
 const Send = require('../controllers/Send');
 const Registration = require('../controllers/Registration');
+const env = require('../data/env');
 
 class Connector extends BasicConnector {
     constructor({ smsGate, smsSecondCheck }) {
@@ -15,7 +16,7 @@ class Connector extends BasicConnector {
     async start() {
         await super.start({
             serverRoutes: {
-                sendPlainSms: this._sendController.sendPlainSms.bind(this._sendController),
+                plainSms: this._sendController.sendPlainSms.bind(this._sendController),
             },
             requiredClients: {
                 registration: env.GLS_REGISTRATION_CONNECT,

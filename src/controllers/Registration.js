@@ -7,15 +7,15 @@ class Registration extends BasicController {
         super({ connector });
 
         smsGate.on('incoming', this.incomingSms.bind(this));
-        smsSecondCheck.on('sms', this.recentSmsList.bind(this));
+        smsSecondCheck.on('recentList', this.recentSmsList.bind(this));
     }
 
     async incomingSms(phone) {
         await this.callService('registration', 'incomingSms', { phone });
     }
 
-    async recentSmsList(phone) {
-        await this.callService('registration', 'recentSmsList', { phone });
+    async recentSmsList(list) {
+        await this.callService('registration', 'recentSmsList', { list });
     }
 
     async callService(...args) {

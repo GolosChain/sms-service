@@ -24,7 +24,14 @@ class SmsSecondCheck extends BasicService {
     async iteration() {
         const history = await this._extractPhonesHistory();
 
-        await this._notifyAboutVerified(history);
+        if (history.length) {
+            this.emit(
+                'recentList',
+                history.map(phone => {
+                    return { phone };
+                })
+            );
+        }
     }
 
     async _extractPhonesHistory() {
@@ -60,12 +67,6 @@ class SmsSecondCheck extends BasicService {
         this._twilio.messages.each(query, message => result.push(message.from));
 
         return result;
-    }
-
-    async _notifyAboutVerified(history) {
-        for (let phone of history) {
-            this.emit('sms', phone);
-        }
     }
 }
 

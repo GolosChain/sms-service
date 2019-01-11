@@ -10,12 +10,12 @@ class Registration extends BasicController {
         smsSecondCheck.on('sms', this.recentSmsList.bind(this));
     }
 
-    async incomingSms(data = {}) {
-        await this.callService('registration', 'incomingSms', data);
+    async incomingSms(phone) {
+        await this.callService('registration', 'incomingSms', { phone });
     }
 
-    async recentSmsList(data = {}) {
-        await this.callService('registration', 'recentSmsList', data);
+    async recentSmsList(phone) {
+        await this.callService('registration', 'recentSmsList', { phone });
     }
 
     async callService(...args) {

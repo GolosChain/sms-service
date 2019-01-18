@@ -22,12 +22,21 @@ class Smsc {
             `&fmt=3`,
             `&charset=utf-8`,
         ].join('');
-        const result = await request.get(query);
+        const resultString = await request.get(query);
+        let result;
+
+        try {
+            result = JSON.parse(resultString);
+        } catch (error) {
+            throw { code: 500, message: 'Invalid sms service response' };
+        }
 
         if (result.error) {
-            Logger.error(`SMSC send error - [${result.error_code}] ${result.error}`);
+            const errorText = `SMSC send error - [${result.error_code}] ${result.error}`;
 
-            throw { code: 500, message: result.error.message };
+            Logger.error(errorText);
+
+            throw { code: 500, message: errorText };
         } else {
             return result;
         }

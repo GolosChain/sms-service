@@ -51,15 +51,14 @@ class SmsGate extends BasicService {
 
         switch (targetLang) {
             case 'ru':
+            case 'by':
                 await this._smsc.send(phone, message);
                 break;
 
             default:
                 const from = env.GLS_TWILIO_PHONE_FROM;
-                const to = `+${phone}`;
-
                 try {
-                    await this._twilio.messages.create({ from, to, body: message });
+                    await this._twilio.messages.create({ from, to: phone, body: message });
                 } catch (error) {
                     Logger.error(`Twilio sms send error - ${error}`);
                     stats.increment('twilio_sms_send_error');

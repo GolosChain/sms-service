@@ -6,10 +6,9 @@ const stats = core.utils.statsClient;
 const env = require('../data/env');
 
 class SmsSecondCheck extends BasicService {
-    constructor(smsc, twilio) {
+    constructor(twilio) {
         super();
 
-        this._smsc = smsc;
         this._twilio = twilio;
     }
 
@@ -35,28 +34,16 @@ class SmsSecondCheck extends BasicService {
     }
 
     async _extractPhonesHistory() {
-        let smsc = [];
-        let twilio = [];
+        let history = [];
 
         try {
-            smsc = await this._extractPhonesHistoryFromSMSC();
-        } catch (error) {
-            Logger.error(`Get history from SMSC - ${error}`);
-            stats.increment('get_history_from_smsc_error');
-        }
-
-        try {
-            twilio = await this._extractPhonesHistoryFromTWILIO();
+            history = await this._extractPhonesHistoryFromTWILIO();
         } catch (error) {
             Logger.error(`Get history from TWILIO - ${error}`);
             stats.increment('get_history_from_twilio_error');
         }
 
-        return [].concat(smsc, twilio);
-    }
-
-    async _extractPhonesHistoryFromSMSC() {
-        return await this._smsc.getPhonesHistory();
+        return history;
     }
 
     async _extractPhonesHistoryFromTWILIO() {

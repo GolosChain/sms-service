@@ -9,10 +9,9 @@ const errors = require('../utils/Errors');
 const env = require('../data/env');
 
 class SmsGate extends BasicService {
-    constructor(smsc, twilio) {
+    constructor(twilio) {
         super();
 
-        this._smsc = smsc;
         this._twilio = twilio;
         this._server = null;
     }
@@ -49,26 +48,14 @@ class SmsGate extends BasicService {
             throw { code: 400, message: 'Invalid request' };
         }
 
-        if (env.GLS_USE_TWILIO) {
-            switch (targetLang) {
-                case 'ru':
-                case 'by':
-                    await this._smsc.send(phone, message);
-                    break;
+        const from = env.GLS_TWILIO_PHONE_FROM;
+        try {
+            await this._twilio.messages.create({ from, to: phone, body: message });
+        } catch (error) {
+            Logger.error(`Twilio sms send error - ${error}`);
+            stats.increment('twilio_sms_send_error');
 
-                default:
-                    const from = env.GLS_TWILIO_PHONE_FROM;
-                    try {
-                        await this._twilio.messages.create({ from, to: phone, body: message });
-                    } catch (error) {
-                        Logger.error(`Twilio sms send error - ${error}`);
-                        stats.increment('twilio_sms_send_error');
-
-                        throw { code: 500, message: error.message };
-                    }
-            }
-        } else {
-            await this._smsc.send(phone, message);
+            throw { code: 500, message: error.message };
         }
     }
 
